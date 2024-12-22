@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Form</title>
+    <style>
+        /* CSS styles for the login form */
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+        }
+
+        .login-container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .login-container h2 {
+            margin-bottom: 20px;
+        }
+
+        .login-container input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .login-container button {
+            width: 100%;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .login-container button:hover {
+            background-color: #45a049;
+        }
+
+        .remember-me {
+            display: flex;
+            align-items: center;
+        }
+
+        .remember-me input {
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <h2>Login</h2>
+        <form id="loginForm">
+            <input type="text" id="username" placeholder="Username" required>
+            <input type="password" id="password" placeholder="Password" required>
+            <div class="remember-me">
+                <input type="checkbox" id="rememberMe">
+                <label for="rememberMe">Remember me</label>
+            </div>
+            <button type="submit">Login</button>
+        </form>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check if there are saved credentials
+            if (localStorage.getItem('rememberMe') === 'true') {
+                document.getElementById('username').value = localStorage.getItem('username');
+                document.getElementById('password').value = localStorage.getItem('password');
+                document.getElementById('rememberMe').checked = true;
+            }
+
+            document.getElementById('loginForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const username = document.getElementById('username').value;
+                const password = document.getElementById('password').value;
+                const rememberMe = document.getElementById('rememberMe').checked;
+
+                // Check credentials
+                if (username === 'syed' && password === 'ahmed') {
+                    if (rememberMe) {
+                        localStorage.setItem('username', username);
+                        localStorage.setItem('password', password);
+                        localStorage.setItem('rememberMe', 'true');
+                        // Set expiration date for 1 month
+                        const now = new Date();
+                        const expirationTime = now.getTime() + (30 * 24 * 60 * 60 * 1000);
+                        localStorage.setItem('expirationTime', expirationTime);
+                    } else {
+                        localStorage.removeItem('username');
+                        localStorage.removeItem('password');
+                        localStorage.removeItem('rememberMe');
+                        localStorage.removeItem('expirationTime');
+                    }
+
+                    // Redirect to another page
+                    window.location.href = "https://chilibowlflashpersonal.onrender.com/"; // Change this to your desired URL
+                } else {
+                    alert('Invalid username or password!');
+                }
+            });
+
+            // Check if the saved credentials have expired
+            const expirationTime = localStorage.getItem('expirationTime');
+            if (expirationTime && new Date().getTime() > expirationTime) {
+                localStorage.removeItem('username');
+                localStorage.removeItem('password');
+                localStorage.removeItem('rememberMe');
+                localStorage.removeItem('expirationTime');
+            }
+        });
+    </script>
+</body>
+</html>
